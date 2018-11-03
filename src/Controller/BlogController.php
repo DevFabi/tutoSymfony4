@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Article;
+use App\Repository\ArticleRepository;
 
 class BlogController extends AbstractController
 {
@@ -20,16 +22,29 @@ class BlogController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function home()
+    public function home(ArticleRepository $repo)
     {
-        return $this->render('blog/home.html.twig');
+        $articles = $repo->findAll();
+        return $this->render('blog/home.html.twig', [
+            'articles' => $articles
+        ]);
+    }
+
+      /**
+     * @Route("/blog/new}", name="blog_create")
+     */
+    public function create()
+    {
+        return $this->render('blog/create.html.twig');
     }
 
     /**
-     * @Route("/blog/12", name="blog_show")
+     * @Route("/blog/{id}", name="blog_show")
      */
-    public function show()
+    public function show(Article $article)
     {
-        return $this->render('blog/show.html.twig');
+        return $this->render('blog/show.html.twig',[
+            'article' => $article
+        ]);
     }
 }
