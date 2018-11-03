@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use Symfony\Component\HttpFoundation\Request;
+use App\Form\ArticleType;
 
 class BlogController extends AbstractController
 {
@@ -33,9 +35,25 @@ class BlogController extends AbstractController
       /**
      * @Route("/blog/new}", name="blog_create")
      */
-    public function create()
+    public function create(Request $request)
     {
-        return $this->render('blog/create.html.twig');
+        $article = new Article;
+
+        $form = $this->createForm(ArticleType::class,$article);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+           $article->setCreatedAt(new \DateTime());
+           $manager->persist($article);
+           $manager->flush();
+
+        return $this->redirectToRoute('blog_show', ['id' => $article->getId()]);
+        }
+
+        return $this->render('blog/create.html.twig', [
+            'formArticle' => $form->createView()
+        ]);
     }
 
     /**
