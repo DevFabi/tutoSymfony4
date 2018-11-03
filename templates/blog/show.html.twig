@@ -2,6 +2,13 @@
 
  {% block body %}
 <h3>{{article.title}}</h3>
+{{ article.category.title}}
 <p>{{article.content}}</p>
+<br>
+<p> {% for comment in article.comments %}
+    <p> {{comment.author}} </p>
+    <p> {{ comment.content }} </p>
+    <br>
+{% endfor %} </p>
  {% endblock %}
  
