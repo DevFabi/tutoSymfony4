@@ -5,6 +5,7 @@
 {{ article.category.title}}
 <p>{{article.content}}</p>
 <br>
+<a href="{{path ('article_comment', {'id' : article.id })}}">Ajouter un commentaire</a>
 <p> {% for comment in article.comments %}
     <p> {{comment.author}} </p>
     <p> {{ comment.content }} </p>
